@@ -8,7 +8,6 @@ const quadrants = {
   bottomRight: [48, 47, 46, 45, 44, 43, 42, 41]
 };
 
-// Crea un objeto con las 32 llaves inicializadas
 const generateInitialTeethState = () => {
   const initialState = {};
   Object.values(quadrants).flat().forEach((num) => {
@@ -20,18 +19,15 @@ const generateInitialTeethState = () => {
   return initialState;
 };
 
-// --- 2. Sub-componente: Diente Individual (Ahora es un componente "Tonto/Controlado") ---
+// --- 2. Sub-componente: Diente Individual ---
 function Tooth({ number, data, onUpdate }) {
   const { isMissing, faces } = data;
 
   const toggleFace = (faceName) => {
     if (isMissing) return;
-
     const states = ['healthy', 'caries', 'filled'];
     const currentState = faces[faceName];
     const nextState = states[(states.indexOf(currentState) + 1) % states.length];
-
-    // Llamamos a la función del padre para actualizar solo esta cara
     onUpdate(number, {
       ...data,
       faces: { ...faces, [faceName]: nextState }
@@ -83,11 +79,9 @@ function Tooth({ number, data, onUpdate }) {
 }
 
 // --- 3. Componente Principal: Odontograma ---
-export function Odontogram() {
-  // El estado global de los 32 dientes vive aquí
+export function Odontogram({ onClose }) {
   const [teethState, setTeethState] = useState(generateInitialTeethState());
 
-  // Función que se le pasa a cada diente para que pueda actualizar su propia porción del estado
   const handleToothUpdate = (toothNumber, newToothData) => {
     setTeethState((prev) => ({
       ...prev,
@@ -95,18 +89,27 @@ export function Odontogram() {
     }));
   };
 
-  // Función para simular el guardado en base de datos
   const handleSaveToDatabase = () => {
     const jsonToSave = JSON.stringify(teethState, null, 2);
-    console.log("JSON listo para enviar al backend:", jsonToSave);
-    alert("Revisa la consola del navegador para ver el JSON generado.");
+    console.log("JSON guardado:", jsonToSave);
+    alert("¡Odontograma guardado exitosamente!");
+    
+    if (onClose) onClose(); 
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full relative">
+    <div className="flex flex-col items-center justify-center h-full relative p-6">
       
-      {/* Botón de Guardado */}
-      <div className="absolute top-0 right-0">
+      {/* Botones de Acción */}
+      <div className="absolute top-6 right-6 flex gap-3">
+        {onClose && (
+          <button 
+            onClick={onClose}
+            className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-bold rounded-xl transition-colors"
+          >
+            Cerrar
+          </button>
+        )}
         <button 
           onClick={handleSaveToDatabase}
           className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl shadow-md transition-colors"
@@ -115,7 +118,8 @@ export function Odontogram() {
         </button>
       </div>
 
-      <div className="bg-white/80 p-8 rounded-2xl shadow-sm border border-slate-200/50 mt-12">
+      <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200/50 mt-12 w-full max-w-5xl">
+        <h2 className="text-2xl font-bold text-slate-800 mb-8 border-b pb-4">Odontograma Clínico</h2>
         
         {/* Maxilar Superior */}
         <div className="flex justify-center mb-8">
@@ -146,7 +150,6 @@ export function Odontogram() {
             ))}
           </div>
         </div>
-
       </div>
 
       {/* Leyenda de Estados */}

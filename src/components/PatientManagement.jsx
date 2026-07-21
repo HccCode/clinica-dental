@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Odontogram } from './Odontogram.jsx'; 
 
+// Datos simulados iniciales (coinciden con los del calendario)
 const mockPatients = [
   { 
     id: 1, 
@@ -34,26 +34,25 @@ const mockPatients = [
   }
 ];
 
-export default function PatientProfile() {
+export function PatientManagement() {
   const [patients, setPatients] = useState(mockPatients);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPatient, setSelectedPatient] = useState(mockPatients[0]);
-  
-  // Estado para el Modal del Odontograma
-  const [isOdontogramOpen, setIsOdontogramOpen] = useState(false);
 
+  // Filtrar pacientes por nombre
   const filteredPatients = patients.filter(p => 
     p.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 flex h-[750px] overflow-hidden relative">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 flex h-[750px] overflow-hidden">
       
       {/* PANEL LATERAL: Lista de Pacientes */}
       <div className="w-1/3 border-r border-gray-100 bg-gray-50/30 flex flex-col">
         <div className="p-5 border-b border-gray-100">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Pacientes</h2>
           
+          {/* Barra de Búsqueda */}
           <div className="relative">
             <input
               type="text"
@@ -70,6 +69,7 @@ export default function PatientProfile() {
           </div>
         </div>
 
+        {/* Lista Filtrada */}
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
           {filteredPatients.map(patient => (
             <div 
@@ -104,6 +104,7 @@ export default function PatientProfile() {
       <div className="w-2/3 flex flex-col bg-white">
         {selectedPatient ? (
           <>
+            {/* Cabecera del Perfil */}
             <div className="p-8 border-b border-gray-100 flex justify-between items-start">
               <div className="flex items-center gap-5">
                 <div className="h-16 w-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl font-bold">
@@ -123,8 +124,10 @@ export default function PatientProfile() {
               </button>
             </div>
 
+            {/* Contenido del Expediente */}
             <div className="p-8 flex-1 overflow-y-auto">
               
+              {/* Sección: Información Personal */}
               <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Información de Contacto</h3>
               <div className="grid grid-cols-2 gap-6 mb-8">
                 <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
@@ -141,6 +144,7 @@ export default function PatientProfile() {
                 </div>
               </div>
 
+              {/* Sección: Historial Médico Básico */}
               <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Datos Médicos</h3>
               <div className="grid grid-cols-2 gap-6 mb-8">
                 <div className="bg-red-50 p-4 rounded-xl border border-red-100">
@@ -153,17 +157,16 @@ export default function PatientProfile() {
                 </div>
               </div>
 
+              {/* Sección: Notas Clínicas */}
               <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Notas Clínicas</h3>
               <div className="bg-yellow-50/50 p-5 rounded-xl border border-yellow-100 text-gray-700 text-sm leading-relaxed">
                 {selectedPatient.notes}
               </div>
 
+              {/* Botón de Acción Rápida (Conector para el odontograma futuro) */}
               <div className="mt-8 pt-6 border-t border-gray-100">
-                <button 
-                  onClick={() => setIsOdontogramOpen(true)}
-                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-bold shadow-sm transition-all"
-                >
-                  Abrir Odontograma Interactivo
+                <button className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-bold shadow-sm transition-all">
+                  Abrir Odontograma
                 </button>
               </div>
 
@@ -175,16 +178,6 @@ export default function PatientProfile() {
           </div>
         )}
       </div>
-
-      {/* --- MODAL DEL ODONTOGRAMA --- */}
-      {isOdontogramOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-          <div className="bg-[#F4F7FE] w-full max-w-6xl h-[90vh] rounded-3xl shadow-2xl overflow-y-auto animate-in fade-in zoom-in duration-200">
-            <Odontogram onClose={() => setIsOdontogramOpen(false)} />
-          </div>
-        </div>
-      )}
-
     </div>
   );
 }
