@@ -72,18 +72,17 @@ function DraggableAppointment({ appointment, top, height, onNotifyArrival }) {
           <p className="text-xs mt-1 font-medium opacity-90">{appointment.treatment}</p>
         </div>
         
-        {/* Derecha: Info del Doctor y Botón */}
-        <div className="flex flex-col items-end gap-1.5">
+        {/* Derecha: Info del Doctor y Botón MÁS GRANDE */}
+        <div className="flex flex-col items-end gap-2">
           <span className="text-xs font-bold uppercase tracking-wider opacity-80">{appointment.doctor}</span>
           
           {appointment.status === 'pending' && (
             <button
-              // Detenemos la propagación para que al dar clic no se active el arrastre de la tarjeta
               onPointerDown={(e) => e.stopPropagation()} 
               onClick={() => onNotifyArrival(appointment.id)}
-              className="bg-white/60 hover:bg-white hover:scale-105 active:scale-95 text-gray-800 text-[10px] font-bold py-1 px-2.5 rounded shadow-sm border border-black/5 transition-all flex items-center gap-1"
+              className="bg-white hover:bg-gray-50 active:scale-95 text-gray-900 text-sm font-bold py-2 px-3 rounded-lg shadow-md border border-gray-200 transition-all flex items-center gap-2 z-20"
             >
-              🔔 Notificar
+              <span className="text-base">🔔</span> Notificar Llegada
             </button>
           )}
         </div>
@@ -102,11 +101,10 @@ function DraggableAppointment({ appointment, top, height, onNotifyArrival }) {
 export function CalendarView() {
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  // Añadimos la propiedad "status: 'pending'" al estado inicial
   const [appointments, setAppointments] = useState([
     {
       id: 1,
-      date: '2026-07-20',
+      date: '2026-07-21',
       patient: 'Juan Pérez',
       treatment: 'Resina Pieza 14',
       time: '09:00',
@@ -117,14 +115,14 @@ export function CalendarView() {
     },
     {
       id: 2,
-      date: '2026-07-20',
+      date: '2026-07-21',
       patient: 'María López',
       treatment: 'Limpieza General',
       time: '10:30',
       duration: 1,
       doctor: 'Dra. Gómez',
       color: 'bg-green-100 border-green-400 text-green-800',
-      status: 'arrived' // Esta cita ya fue notificada como ejemplo
+      status: 'arrived'
     },
     {
       id: 3,
@@ -149,7 +147,7 @@ export function CalendarView() {
     time: '09:00',
     duration: 1,
     doctor: 'Dr. Silva',
-    status: 'pending' // Las nuevas citas nacen como pendientes
+    status: 'pending'
   });
 
   const timeSlots = [
@@ -190,14 +188,10 @@ export function CalendarView() {
     );
   };
 
-  // Función que cambia el estado al dar clic en el botón
   const handleNotifyArrival = (appointmentId) => {
     setAppointments(prev => prev.map(appt => 
       appt.id === appointmentId ? { ...appt, status: 'arrived' } : appt
     ));
-    
-    // Opcional: Aquí podrías enviar un Toast o una alerta visual general
-    // alert("Se ha notificado al doctor.");
   };
 
   const handleCreateAppointment = (e) => {
@@ -317,7 +311,7 @@ export function CalendarView() {
                   appointment={appt}
                   top={calculateTop(appt.time)}
                   height={calculateHeight(appt.duration)}
-                  onNotifyArrival={handleNotifyArrival} // Pasamos la función a la tarjeta
+                  onNotifyArrival={handleNotifyArrival}
                 />
               ))}
             </div>

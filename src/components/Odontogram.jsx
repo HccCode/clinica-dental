@@ -78,8 +78,8 @@ function Tooth({ number, data, onUpdate }) {
   );
 }
 
-// --- 3. Componente Principal: Odontograma ---
-export function Odontogram({ onClose }) {
+// --- 3. Componente Principal: Odontograma (ACTUALIZADO) ---
+export function Odontogram({ patientId, patientName, onClose, onSave }) {
   const [teethState, setTeethState] = useState(generateInitialTeethState());
 
   const handleToothUpdate = (toothNumber, newToothData) => {
@@ -90,11 +90,15 @@ export function Odontogram({ onClose }) {
   };
 
   const handleSaveToDatabase = () => {
-    const jsonToSave = JSON.stringify(teethState, null, 2);
-    console.log("JSON guardado:", jsonToSave);
-    alert("¡Odontograma guardado exitosamente!");
-    
-    if (onClose) onClose(); 
+    // Verificamos si la función onSave fue proporcionada por el componente padre
+    if (onSave) {
+      onSave(patientId, teethState);
+    } else {
+      // Fallback en caso de que se use el componente aislado
+      console.log("JSON guardado:", JSON.stringify(teethState, null, 2));
+      alert("¡Odontograma guardado exitosamente!");
+      if (onClose) onClose(); 
+    }
   };
 
   return (
@@ -119,7 +123,10 @@ export function Odontogram({ onClose }) {
       </div>
 
       <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200/50 mt-12 w-full max-w-5xl">
-        <h2 className="text-2xl font-bold text-slate-800 mb-8 border-b pb-4">Odontograma Clínico</h2>
+        {/* Título dinámico que muestra el nombre del paciente */}
+        <h2 className="text-2xl font-bold text-slate-800 mb-8 border-b pb-4">
+          Odontograma Clínico {patientName && <span className="text-indigo-600 font-medium ml-2">- {patientName}</span>}
+        </h2>
         
         {/* Maxilar Superior */}
         <div className="flex justify-center mb-8">
