@@ -78,9 +78,19 @@ function Tooth({ number, data, onUpdate }) {
   );
 }
 
-// --- 3. Componente Principal: Odontograma (ACTUALIZADO) ---
+// --- 3. Componente Principal: Odontograma ---
 export function Odontogram({ patientId, patientName, onClose, onSave }) {
-  const [teethState, setTeethState] = useState(generateInitialTeethState());
+  
+  // 1. Intentamos cargar datos guardados desde localStorage
+  const [teethState, setTeethState] = useState(() => {
+    const savedData = localStorage.getItem(`odontogram_patient_${patientId}`);
+    if (savedData) {
+      console.log("Cargando odontograma previo para el paciente ID:", patientId);
+      return JSON.parse(savedData);
+    }
+    console.log("Generando odontograma nuevo en blanco...");
+    return generateInitialTeethState();
+  });
 
   const handleToothUpdate = (toothNumber, newToothData) => {
     setTeethState((prev) => ({
@@ -90,12 +100,11 @@ export function Odontogram({ patientId, patientName, onClose, onSave }) {
   };
 
   const handleSaveToDatabase = () => {
-    // Verificamos si la función onSave fue proporcionada por el componente padre
     if (onSave) {
       onSave(patientId, teethState);
     } else {
-      // Fallback en caso de que se use el componente aislado
-      console.log("JSON guardado:", JSON.stringify(teethState, null, 2));
+      // Fallback aislado (si no está el componente padre)
+      localStorage.setItem(`odontogram_patient_${patientId}`, JSON.stringify(teethState));
       alert("¡Odontograma guardado exitosamente!");
       if (onClose) onClose(); 
     }
@@ -123,7 +132,6 @@ export function Odontogram({ patientId, patientName, onClose, onSave }) {
       </div>
 
       <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200/50 mt-12 w-full max-w-5xl">
-        {/* Título dinámico que muestra el nombre del paciente */}
         <h2 className="text-2xl font-bold text-slate-800 mb-8 border-b pb-4">
           Odontograma Clínico {patientName && <span className="text-indigo-600 font-medium ml-2">- {patientName}</span>}
         </h2>

@@ -1,39 +1,5 @@
 import React, { useState } from 'react';
 
-// Datos simulados iniciales (coinciden con los del calendario)
-const mockPatients = [
-  { 
-    id: 1, 
-    name: 'Juan Pérez', 
-    phone: '686-555-0123', 
-    email: 'juan.perez@email.com', 
-    dob: '1985-04-12', 
-    bloodType: 'O+', 
-    allergies: 'Penicilina', 
-    notes: 'Paciente presenta ansiedad moderada durante extracciones. Aplicar anestesia tópica extra antes de infiltrar.' 
-  },
-  { 
-    id: 2, 
-    name: 'María López', 
-    phone: '686-555-0456', 
-    email: 'maria.l@email.com', 
-    dob: '1990-08-25', 
-    bloodType: 'A+', 
-    allergies: 'Ninguna', 
-    notes: 'Requiere profilaxis cada 6 meses. Alta tendencia a acumulación de sarro en zona lingual inferior.' 
-  },
-  { 
-    id: 3, 
-    name: 'Roberto Carlos', 
-    phone: '686-555-0789', 
-    email: 'roberto.c@email.com', 
-    dob: '1978-11-05', 
-    bloodType: 'B-', 
-    allergies: 'Látex', 
-    notes: 'Tratamiento de ortodoncia finalizado en 2024. Usa retenedores nocturnos.' 
-  }
-];
-
 export function PatientManagement() {
   const [patients, setPatients] = useState(mockPatients);
   const [searchTerm, setSearchTerm] = useState('');

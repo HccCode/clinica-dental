@@ -3,13 +3,6 @@ import React, { createContext, useState, useContext } from 'react';
 // Creamos el contexto
 const AuthContext = createContext();
 
-// Lista de usuarios simulados (Mock Database)
-const mockUsers = [
-  { id: 1, name: 'Recepcionista Ana', role: 'receptionist', email: 'admin@clinica.com', password: '123' },
-  { id: 2, name: 'Dr. Silva', role: 'doctor', email: 'silva@clinica.com', password: '123' },
-  { id: 3, name: 'Dra. Gómez', role: 'doctor', email: 'gomez@clinica.com', password: '123' }
-];
-
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
 

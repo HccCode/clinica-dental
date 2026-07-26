@@ -1,23 +1,7 @@
 import React, { useState } from 'react';
 
 const MedicalHistory = () => {
-  // 1. Estado inicial con los datos preexistentes de tu diseño
-  const [notes, setNotes] = useState([
-    {
-      id: 1,
-      date: '15 de Julio, 2026',
-      title: 'Consulta General y Limpieza',
-      description: 'Paciente acude a revisión de rutina. Se realiza profilaxis. No se detectan caries nuevas. Encías presentan ligera inflamación en el cuadrante inferior izquierdo, se recomienda mejorar técnica de cepillado.'
-    },
-    {
-      id: 2,
-      date: '10 de Enero, 2026',
-      title: 'Apertura de Expediente',
-      description: 'Registro inicial del paciente. Se toman radiografías panorámicas (ver pestaña de archivos). Se reporta sensibilidad al frío en piezas 14 y 15.'
-    }
-  ]);
-
-  // 2. Estados para controlar el Modal y el nuevo input
+    // 2. Estados para controlar el Modal y el nuevo input
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newNote, setNewNote] = useState({ title: '', description: '' });
 
